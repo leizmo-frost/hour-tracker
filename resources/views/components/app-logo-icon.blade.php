@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" width="100%" height="100%">
+  <defs>
+    <linearGradient id="tealGlow" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2DD4BF" />
+      <stop offset="100%" stop-color="#14B8A6" />
+    </linearGradient>
+  </defs>
+
+  <!-- Dark Navy Background -->
+  <rect width="200" height="200" rx="45" fill="#0B1120" />
+
+  <!-- Left Time Block (Clock In) -->
+  <rect x="40" y="55" width="24" height="90" rx="12" fill="#1E293B" />
+
+  <!-- Right Time Block (Clock Out) -->
+  <rect x="136" y="55" width="24" height="90" rx="12" fill="#1E293B" />
+
+  <!-- Central Clock Hub -->
+  <circle cx="100" cy="100" r="38" fill="#111827" stroke="url(#tealGlow)" stroke-width="8" />
+
+  <!-- Clock Hands (White for regular time, Orange for overtime) -->
+  <line x1="100" y1="100" x2="100" y2="72" stroke="#F8FAFC" stroke-width="6" stroke-linecap="round" />
+  <line x1="100" y1="100" x2="122" y2="100" stroke="#FB923C" stroke-width="6" stroke-linecap="round" />
+
+  <!-- Active Center Dot -->
+  <circle cx="100" cy="100" r="5" fill="#2DD4BF" />
+</svg>
+
