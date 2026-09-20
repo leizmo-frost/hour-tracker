@@ -6,10 +6,13 @@
     <body class="min-h-screen bg-black antialiased text-gray-300 selection:bg-teal-500/30">
         <div class="relative grid h-dvh flex-col items-center justify-center px-8 sm:px-0 lg:max-w-none lg:grid-cols-2 lg:px-0">
 
-            <!-- Left Panel (Desktop Only) -->
-            <div class="bg-black relative hidden h-full flex-col p-10 text-white lg:flex border-r border-gray-900">
-                <!-- Pure black background with the subtle teal glow from the welcome page -->
-                <div class="absolute inset-0 bg-black"></div>
+            <!-- Left Panel (Desktop Only) - Full Bleed Image -->
+            <div class="bg-black relative hidden h-full flex-col p-10 text-white lg:flex border-r border-gray-900 overflow-hidden">
+                <!-- Full-bleed background image -->
+                <img src="/images/login-visual.png" alt="" class="absolute inset-0 w-full h-full object-cover opacity-60" />
+                <!-- Gradient overlay for text readability -->
+                <div class="absolute inset-0 bg-gradient-to-b from-black/80 via-black/60 to-black/90"></div>
+                <!-- Subtle teal glow -->
                 <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-teal-500/5 rounded-full blur-[120px] pointer-events-none"></div>
 
                 <!-- Logo and Name -->
@@ -24,10 +27,11 @@
                     [$message, $author] = str(Illuminate\Foundation\Inspiring::quotes()->random())->explode('-');
                 @endphp
 
+                <!-- Quote with frosted glass effect -->
                 <div class="relative z-20 mt-auto">
-                    <blockquote class="space-y-2">
+                    <blockquote class="space-y-2 backdrop-blur-sm bg-black/30 rounded-xl p-6 border border-gray-800">
                         <flux:heading size="lg" class="text-white">&ldquo;{{ trim($message) }}&rdquo;</flux:heading>
-                        <footer><flux:heading size="sm" class="text-gray-500">{{ trim($author) }}</flux:heading></footer>
+                        <footer><flux:heading size="sm" class="text-gray-400">{{ trim($author) }}</flux:heading></footer>
                     </blockquote>
                 </div>
             </div>
