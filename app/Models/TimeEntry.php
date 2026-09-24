@@ -7,16 +7,22 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class TimeEntry extends Model
 {
-    protected $fillable = ['company_id', 'employee_id', 'clock_in', 'clock_out', 'break_start', 'break_end', 'clock_in_method', 'location', 'device_info', 'ip_address', 'is_locked', 'correction_of', 'correction_reason'];
-    protected $casts = ['clock_in' => 'datetime', 'clock_out' => 'datetime', 'break_start' => 'datetime', 'break_end' => 'datetime', 'location' => 'array', 'is_locked' => 'boolean'];
+    protected $fillable = [
+        'employee_id', 'shift_id', 'work_date', 'clock_in', 'clock_out', 'break_minutes',
+        'total_minutes', 'latitude', 'longitude', 'clock_in_ip', 'clock_out_ip', 'status', 'notes',
+    ];
 
-    protected static function boot()
+    protected function casts(): array
     {
-        parent::boot();
-        // Prevent updates if locked
-        static::updating(function ($timeEntry) {
-            if ($timeEntry->is_locked) throw new \Exception("Cannot modify a locked TimeEntry. Submit a correction request.");
-        });
+        return [
+            'work_date' => 'date',
+            'clock_in' => 'datetime',
+            'clock_out' => 'datetime',
+            'latitude' => 'decimal:7',
+            'longitude' => 'decimal:7',
+            'break_minutes' => 'integer',
+            'total_minutes' => 'integer',
+        ];
     }
 
     public function employee(): BelongsTo
@@ -24,11 +30,13 @@ class TimeEntry extends Model
         return $this->belongsTo(Employee::class);
     }
 
-    public function getDurationAttribute(): float
+    public function shift(): BelongsTo
     {
-        if (!$this->clock_out) return 0;
-        $totalMinutes = $this->clock_in->diffInMinutes($this->clock_out);
-        $breakMinutes = ($this->break_start && $this->break_end) ? $this->break_start->diffInMinutes($this->break_end) : 0;
-        return max(0, ($totalMinutes - $breakMinutes) / 60);
+        return $this->belongsTo(Shift::class);
+    }
+
+    public function getHoursAttribute(): float
+    {
+        return round($this->total_minutes / 60, 2);
     }
 }

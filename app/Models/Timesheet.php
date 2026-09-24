@@ -2,50 +2,28 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Timesheet extends Model
 {
     protected $fillable = [
-        'company_id',
-        'employee_id',
-        'period_start',
-        'period_end',
-        'regular_hours',
-        'overtime_hours',
-        'total_hours',
-        'status',
-        'approved_by',
-        'approved_at',
+        'employee_id', 'period_start', 'period_end', 'regular_hours', 'overtime_hours',
+        'pto_hours', 'total_hours', 'status', 'reviewed_by', 'submitted_at', 'reviewed_at', 'review_notes',
     ];
 
-    protected $casts = [
-        'period_start' => 'date',
-        'period_end' => 'date',
-        'approved_at' => 'datetime',
-        'regular_hours' => 'decimal:2',
-        'overtime_hours' => 'decimal:2',
-        'total_hours' => 'decimal:2',
-    ];
-
-    protected static function booted()
+    protected function casts(): array
     {
-        // Global scope to ensure multi-tenancy isolation
-        static::addGlobalScope('company', function (Builder $builder) {
-            if (auth()->check()) {
-                $builder->where('company_id', auth()->user()->company_id);
-            }
-        });
-    }
-
-    // --- Relationships ---
-
-    public function company(): BelongsTo
-    {
-        return $this->belongsTo(Company::class);
+        return [
+            'period_start' => 'date',
+            'period_end' => 'date',
+            'regular_hours' => 'decimal:2',
+            'overtime_hours' => 'decimal:2',
+            'pto_hours' => 'decimal:2',
+            'total_hours' => 'decimal:2',
+            'submitted_at' => 'datetime',
+            'reviewed_at' => 'datetime',
+        ];
     }
 
     public function employee(): BelongsTo
@@ -53,30 +31,8 @@ class Timesheet extends Model
         return $this->belongsTo(Employee::class);
     }
 
-    public function approver(): BelongsTo
+    public function reviewer(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'approved_by');
-    }
-
-    public function timeEntries(): HasMany
-    {
-        return $this->hasMany(TimeEntry::class);
-    }
-
-    public function correctionRequests(): HasMany
-    {
-        return $this->hasMany(TimesheetCorrectionRequest::class);
-    }
-
-    // --- Helper Methods ---
-
-    public function isApproved(): bool
-    {
-        return $this->status === 'approved';
-    }
-
-    public function isPending(): bool
-    {
-        return $this->status === 'submitted';
+        return $this->belongsTo(User::class, 'reviewed_by');
     }
 }
