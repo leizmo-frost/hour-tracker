@@ -13,19 +13,19 @@ return new class extends Migration
     {
         Schema::create('time_entries', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->foreignId('employee_id')->constrained()->cascadeOnDelete();
-            $table->timestamp('clock_in');
-            $table->timestamp('clock_out')->nullable();
-            $table->timestamp('break_start')->nullable();
-            $table->timestamp('break_end')->nullable();
-            $table->string('clock_in_method')->default('web');
-            $table->json('location')->nullable();
-            $table->string('device_info')->nullable();
-            $table->string('ip_address')->nullable();
-            $table->boolean('is_locked')->default(false); // Set true on timesheet approval
-            $table->foreignId('correction_of')->nullable()->constrained('time_entries')->nullOnDelete();
-            $table->text('correction_reason')->nullable();
+            $table->foreignId('shift_id')->nullable()->constrained()->nullOnDelete();
+            $table->date('work_date')->index();
+            $table->dateTime('clock_in');
+            $table->dateTime('clock_out')->nullable();
+            $table->unsignedInteger('break_minutes')->default(0);
+            $table->unsignedInteger('total_minutes')->default(0);
+            $table->decimal('latitude', 10, 7)->nullable();
+            $table->decimal('longitude', 10, 7)->nullable();
+            $table->string('clock_in_ip', 45)->nullable();
+            $table->string('clock_out_ip', 45)->nullable();
+            $table->string('status')->default('open');
+            $table->text('notes')->nullable();
             $table->timestamps();
         });
     }

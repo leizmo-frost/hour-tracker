@@ -11,11 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('companies', function (Blueprint $table) {
+        Schema::create('overtime_rules', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->json('settings')->nullable(); // Stores missed punch thresholds, OT rules
-            $table->enum('status', ['active', 'suspended'])->default('active');
+            $table->string('period_type')->default('weekly');
+            $table->unsignedInteger('threshold_minutes')->default(2400);
+            $table->decimal('multiplier', 5, 2)->default(1.50);
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }
@@ -25,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('companies');
+        Schema::dropIfExists('overtime_rules');
     }
 };
